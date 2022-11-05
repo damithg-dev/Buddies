@@ -1,35 +1,55 @@
 import React from 'react';
-import {Text as RNText, TextProps, StyleSheet, TextStyle} from 'react-native';
+import {
+  Text as RNText,
+  TextProps as RNTextProps,
+  StyleSheet,
+} from 'react-native';
 
 import {Color} from '../Color';
 import {Font} from '../Font';
-import {scaleFont} from '../helpers/scale';
 
-interface Props extends TextProps {
+export enum FontSize {
+  H1,
+  H2,
+  H3,
+  P,
+}
+
+interface TextProps extends RNTextProps {
   children: any;
   center?: boolean;
   small?: boolean;
   wrap?: boolean;
   muted?: boolean;
+  fontSize?: FontSize;
 }
 
 export const Text = ({
   children,
+  fontSize = FontSize.P,
   center = false,
   small = false,
   wrap = false,
   muted = false,
   style,
   ...rest
-}: Props) => {
+}: TextProps) => {
   if (children == null || children === '') {
     return null;
   }
 
-  const fontWeight =
-    style && (style as TextStyle).fontWeight
-      ? (style as TextStyle).fontWeight
-      : '400';
+  const getFontSize = () => {
+    switch (fontSize) {
+      case FontSize.H1:
+        return {fontSize: 32, fontFamily: Font.Bold, lineHeight: 36};
+      case FontSize.H2:
+        return {fontSize: 28, fontFamily: Font.SemiBold, lineHeight: 30};
+      case FontSize.H3:
+        return {fontSize: 24, fontFamily: Font.Medium, lineHeight: 26};
+      case FontSize.P:
+        return {fontSize: 15, fontFamily: Font.Light, lineHeight: 17};
+    }
+  };
 
   return (
     <RNText
@@ -39,8 +59,9 @@ export const Text = ({
         center && textStyles.textCenter,
         muted && textStyles.muted,
         wrap && textStyles.textWrap,
-        {fontFamily: Font.FromWeight(fontWeight)},
+        {...getFontSize()},
         style,
+        // {fontSize: 32, fontFamily: Font.Bold, lineHeight: 36},
       ]}
       {...rest}>
       {children}
@@ -50,9 +71,7 @@ export const Text = ({
 
 export const textStyles = StyleSheet.create({
   text: {
-    fontFamily: Font.CircularBook,
-    fontSize: scaleFont(16),
-    color: Color.PurpleDark,
+    color: Color.PastelBlack,
     lineHeight: 24,
   },
 
@@ -66,11 +85,11 @@ export const textStyles = StyleSheet.create({
   },
 
   small: {
-    fontSize: scaleFont(14),
+    fontSize: 14,
     lineHeight: 18,
   },
 
   muted: {
-    color: Color.Purple,
+    color: Color.PastelGrey,
   },
 });

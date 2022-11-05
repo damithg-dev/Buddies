@@ -1,15 +1,8 @@
 import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
-import * as Sentry from '@sentry/react-native';
-
-import {ArrowLeftIcon, XIcon} from '../icons';
-import {Color} from '../Color';
-import {H2} from './H2';
-import {Navigation} from '../../e2e/TestIds.json';
-import {Text} from './Text';
-import {Font} from './../Font';
-import {scaleFont} from './../helpers/scale';
+import {StyleSheet, Pressable, View} from 'react-native';
+import {Text, FontSize} from './Text';
+import {Styles} from '../Styles';
 
 interface HeaderProps {
   title: string | {title: string; subTitle: string};
@@ -22,74 +15,55 @@ interface HeaderProps {
 
 export const Header = ({
   title,
-  backgroundColor = 'white',
-  leftIcon = <ArrowLeftIcon size={24} />,
+  leftIcon,
   onPressLeft,
-  rightIcon = <XIcon size={24} />,
+  rightIcon,
   onPressRight,
 }: HeaderProps) => {
   const {top} = useSafeAreaInsets();
 
-  const setBackgroundColor = (color: string) => color === Color.PastelWhite;
-
-  return (
-    <View
-      style={[
-        {paddingTop: top},
-        {
-          backgroundColor: setBackgroundColor(backgroundColor),
-        },
-      ]}>
-      <StatusBar backgroundColor={setBackgroundColor(backgroundColor)} />
-      <View style={styles.header}>
-        <View style={styles.left}>
-          {onPressLeft ? (
-            <TouchableOpacity style={styles.touchable} onPress={onPressLeft}>
-              {leftIcon}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.touchable}>
-              <View style={styles.placeHolderIcon} />
-            </View>
-          )}
-        </View>
-
-        {typeof title === 'string' ? (
-          <View style={styles.content}>
-            <H2 center>{title}</H2>
-          </View>
+  const renderLeftIcon = () => {
+    return (
+      <View style={styles.left}>
+        {onPressLeft ? (
+          <Pressable style={styles.touchable} onPress={onPressLeft}>
+            {leftIcon}
+          </Pressable>
         ) : (
-          <View style={styles.content}>
-            <Text
-              center
-              style={{
-                fontFamily: Font.CanelaWebBold,
-                fontSize: scaleFont(22),
-              }}>
-              {title.title}
-            </Text>
-            <Text
-              center
-              style={{
-                fontFamily: Font.CircularMedium,
-                fontSize: scaleFont(14),
-              }}>
-              {title.subTitle}
-            </Text>
+          <View style={styles.touchable}>
+            <View style={styles.placeHolderIcon} />
           </View>
         )}
+      </View>
+    );
+  };
 
-        <View style={styles.right}>
-          {onPressRight ? (
-            <TouchableOpacity style={styles.touchable} onPress={onPressRight}>
-              {rightIcon}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.touchable}>
-              <View style={styles.placeHolderIcon} />
-            </View>
-          )}
+  const RenderRightIcon = () => {
+    return (
+      <View style={styles.right}>
+        {onPressRight ? (
+          <Pressable style={styles.touchable} onPress={onPressRight}>
+            {rightIcon}
+          </Pressable>
+        ) : (
+          <View style={styles.touchable}>
+            <View style={styles.placeHolderIcon} />
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  return (
+    <View style={[{paddingTop: top}, Styles.shadowDefault]}>
+      <View style={styles.header}>
+        {renderLeftIcon()}
+        <View style={styles.content}>
+          <Text fontSize={FontSize.H1} center>
+            {title}
+          </Text>
         </View>
+        {RenderRightIcon()}
       </View>
     </View>
   );
