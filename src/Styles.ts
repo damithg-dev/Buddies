@@ -11,7 +11,7 @@ const shadowStyle: StyleProp<ViewStyle> = {
   shadowOpacity: 0.1,
   shadowRadius: 8,
   elevation: 5,
-  zIndex: 1,
+  zIndex: 10,
 };
 
 export const Styles = StyleSheet.create({

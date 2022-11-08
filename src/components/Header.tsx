@@ -3,6 +3,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, Pressable, View} from 'react-native';
 import {Text, FontSize} from './Text';
 import {Styles} from '../Styles';
+import {Color} from '../Color';
 
 interface HeaderProps {
   title: string | {title: string; subTitle: string};
@@ -10,7 +11,7 @@ interface HeaderProps {
   onPressLeft?: () => void;
   rightIcon?: JSX.Element;
   onPressRight?: () => void;
-  backgroundColor?: 'white' | 'peach' | 'blue-bright';
+  backgroundColor?: 'white' | 'peach' | 'blue-bright' | 'transparent';
 }
 
 export const Header = ({
@@ -19,8 +20,17 @@ export const Header = ({
   onPressLeft,
   rightIcon,
   onPressRight,
+  backgroundColor,
 }: HeaderProps) => {
   const {top} = useSafeAreaInsets();
+  const getBackgroundColor = () => {
+    switch (backgroundColor) {
+      case 'transparent':
+        return 'transparent';
+      case 'white':
+        return Color.PastelWhite;
+    }
+  };
 
   const renderLeftIcon = () => {
     return (
@@ -55,7 +65,14 @@ export const Header = ({
   };
 
   return (
-    <View style={[{paddingTop: top}, Styles.shadowDefault]}>
+    <View
+      style={[
+        {paddingTop: top},
+        Styles.shadowDefault,
+        {
+          backgroundColor: getBackgroundColor(),
+        },
+      ]}>
       <View style={styles.header}>
         {renderLeftIcon()}
         <View style={styles.content}>
@@ -83,6 +100,7 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
+    width: '100%',
   },
 
   right: {

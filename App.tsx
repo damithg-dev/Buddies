@@ -8,7 +8,9 @@ import {BuddyCreate} from './src/screens/BuddyCreate';
 
 export type NavigatorParamList = {
   List: undefined;
-  Details: undefined;
+  Details: {
+    buddy: Buddy;
+  };
   Create: undefined;
 };
 
@@ -19,7 +21,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="List" component={BuddyList} />
-        <Stack.Screen name="Detail" component={BuddyDetail} />
+        <Stack.Screen name="Details" component={BuddyDetail} />
         <Stack.Screen name="Create" component={BuddyCreate} />
       </Stack.Navigator>
     </NavigationContainer>

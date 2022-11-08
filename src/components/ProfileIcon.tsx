@@ -8,27 +8,26 @@ import {Color} from '../Color';
 interface ProfileIconsProps {
   firstName: string;
   lastName?: string;
-  url?: string;
+  imageUrl?: string;
   size: number;
 }
 
-export const ProfileIcons = ({
+export const ProfileIcon = ({
   firstName,
   lastName,
-  url,
+  imageUrl,
   size,
 }: ProfileIconsProps) => {
   const styles = dynamicStyles(size);
 
-  if (url) {
+  if (imageUrl) {
     return (
       <FastImage
         style={styles.rootContainer}
         key={firstName}
         source={{
-          uri: 'https://unsplash.it/400/400?image=1',
-          headers: {Authorization: 'someAuthToken'},
-          priority: FastImage.priority.normal,
+          uri: imageUrl,
+          priority: FastImage.priority.high,
         }}
         resizeMode={FastImage.resizeMode.contain}
       />
@@ -38,8 +37,8 @@ export const ProfileIcons = ({
       <View key={firstName} style={styles.rootContainer}>
         <Text center style={styles.nameText}>
           {lastName
-            ? `${firstName.slice(0, 1)}${lastName.slice(0, 1)}`
-            : `${firstName.slice(0, 2)}`}
+            ? `${firstName.slice(0, 1)}${lastName.slice(0, 1).toUpperCase()}`
+            : `${firstName.slice(0, 2)}`.toUpperCase()}
         </Text>
       </View>
     );
@@ -55,11 +54,16 @@ export const dynamicStyles = (size: number) =>
       borderRadius: size / 2,
       backgroundColor: Color.PastelBlue,
       justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
     },
     nameText: {
-      fontSize: size * 0.6,
+      marginTop: '10%',
+      fontSize: size * 0.58,
       fontFamily: Font.Bold,
-      lineHeight: size * 0.8,
+      lineHeight: size * 0.6,
       color: Color.PastelWhite,
+      textAlign: 'center',
+      textAlignVertical: 'center',
     },
   });
