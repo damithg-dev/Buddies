@@ -7,12 +7,15 @@ import {Header} from '../components/Header';
 import {Add} from '../icons/Add';
 import {BuddyRow} from '../components/BuddyRow';
 import {NavigatorParamList} from '../../App';
+import {useService} from '../realm/Service';
 
 export const BuddyList = () => {
   const {navigate} =
     useNavigation<NavigationProp<NavigatorParamList, 'List'>>();
-  const temp: Buddy = {
-    firstName: 'Damith Amarasinghe',
+  const {buddies, create} = useService();
+  console.log('buddies', buddies.length);
+  const temp: IBuddy = {
+    firstName: 'yyyyyyy Amarasinghe',
     phoneNo: [
       {
         number: '0123456789',
@@ -24,12 +27,12 @@ export const BuddyList = () => {
       },
     ],
   };
-  const array = [temp, temp, temp, temp, temp, temp, temp, temp, temp, temp];
 
-  const onPressBuddy = (buddy: Buddy) => {
-    navigate('Details', {
-      buddy,
-    });
+  const onPressBuddy = (buddy: IBuddy) => {
+    // create(buddy);
+    // navigate('Details', {
+    //   buddy,
+    // });
   };
 
   return (
@@ -38,7 +41,8 @@ export const BuddyList = () => {
         title={'Buddies'}
         rightIcon={<Add color={Color.PastelBlue} />}
         onPressRight={() => {
-          navigate('Create');
+          // navigate('Create');
+          create(temp);
         }}
         backgroundColor={'white'}
       />
@@ -47,13 +51,13 @@ export const BuddyList = () => {
           renderItem={({item}) => {
             return (
               <BuddyRow
-                buddy={item as unknown as Buddy}
+                buddy={item as unknown as IBuddy}
                 onPress={onPressBuddy}
               />
             );
           }}
           estimatedItemSize={78}
-          data={array}
+          data={buddies}
         />
       </View>
     </View>

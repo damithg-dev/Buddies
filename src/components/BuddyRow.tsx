@@ -5,22 +5,27 @@ import {ProfileIcon} from './ProfileIcon';
 import {Color} from '../Color';
 
 interface BuddyRowProp {
-  buddy: Buddy;
-  onPress: (buddy: Buddy) => void;
+  buddy: IBuddy;
+  onPress: (buddy: IBuddy) => void;
 }
 
 export const BuddyRow = ({buddy, onPress}: BuddyRowProp) => {
   return (
     <Pressable onPress={() => onPress(buddy)}>
       <View style={styles.rootContainer}>
-        <ProfileIcon {...buddy} size={45} />
+        <ProfileIcon
+          firstName={buddy.firstName}
+          lastName={buddy.lastName}
+          imageUrl={buddy.imageUrl}
+          size={45}
+        />
         <View style={styles.textContainer}>
           <Text fontSize={FontSize.H3}>{`${buddy.firstName} ${
             buddy.lastName ?? ''
           }`}</Text>
           <View style={styles.textSeparator} />
           <Text>
-            {buddy.phoneNo.map(({number}: PhoneNo) => number).join('/')}
+            {buddy.phoneNo.map(({number}: IPhoneNo) => number).join('/')}
           </Text>
         </View>
       </View>

@@ -1,5 +1,10 @@
 import React from 'react';
-import {RouteProp, NavigationProp} from '@react-navigation/native';
+import {
+  RouteProp,
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 import {Header} from '../components/Header';
 import {Text} from '../components/Text';
@@ -14,18 +19,11 @@ const {width} = Dimensions.get('screen');
 type RouteProps = RouteProp<NavigatorParamList, 'Details'>;
 type NavigationProps = NavigationProp<NavigatorParamList, 'Details'>;
 
-type BuddyDetailProps = {
-  route: RouteProps;
-  navigation: NavigationProps;
-};
-
-export const BuddyDetail = ({
-  route,
-  navigation: {navigate, goBack},
-}: BuddyDetailProps) => {
+export const BuddyDetail = () => {
   const {
     params: {buddy},
-  } = route;
+  } = useRoute<RouteProps>();
+  const {navigate, goBack} = useNavigation<NavigationProps>();
 
   return (
     <View style={styles.root}>
