@@ -16,7 +16,7 @@ type ContextState = {
   error: Error | null;
   create: (buddy: IBuddy) => void;
   update: (id: IBuddy['id']) => void;
-  delete: (id: IBuddy['id']) => void;
+  delete: (id: string) => void;
 };
 
 const BuddyContext = createContext<ContextState>({

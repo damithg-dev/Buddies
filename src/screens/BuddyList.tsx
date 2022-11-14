@@ -9,40 +9,25 @@ import {BuddyRow} from '../components/BuddyRow';
 import {NavigatorParamList} from '../../App';
 import {useService} from '../realm/Service';
 
+type NavigationProps = NavigationProp<NavigatorParamList, 'List'>;
+
 export const BuddyList = () => {
-  const {navigate} =
-    useNavigation<NavigationProp<NavigatorParamList, 'List'>>();
-  const {buddies, create} = useService();
-  console.log('buddies', buddies.length);
-  const temp: IBuddy = {
-    firstName: 'yyyyyyy Amarasinghe',
-    phoneNo: [
-      {
-        number: '0123456789',
-        type: 'Home',
-      },
-      {
-        number: '0123456789',
-        type: 'Mobile',
-      },
-    ],
-  };
+  const {navigate} = useNavigation<NavigationProps>();
+  const {buddies} = useService();
 
   const onPressBuddy = (buddy: IBuddy) => {
-    // create(buddy);
-    // navigate('Details', {
-    //   buddy,
-    // });
+    navigate('Details', {
+      buddy,
+    });
   };
 
   return (
     <View style={styles.rootContainer}>
       <Header
         title={'Buddies'}
-        rightIcon={<Add color={Color.PastelBlue} />}
+        rightIcon={<Add />}
         onPressRight={() => {
-          // navigate('Create');
-          create(temp);
+          navigate('Create');
         }}
         backgroundColor={'white'}
       />

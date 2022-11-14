@@ -36,7 +36,7 @@ export class Buddy implements IBuddy {
       firstName: {type: 'string', indexed: true},
       lastName: 'string?',
       email: 'string?',
-      imageUrl: 'string?',
+      emoji: 'string?',
       createdAt: {type: 'date', default: new Date()},
       phoneNo: {
         type: 'list',
@@ -51,7 +51,7 @@ export class Buddy implements IBuddy {
     this.phoneNo = _buddy.phoneNo;
     this.lastName = _buddy.lastName;
     this.email = _buddy.email;
-    this.imageUrl = _buddy.imageUrl;
+    this.emoji = _buddy.emoji;
   }
 
   public id!: string;
@@ -59,5 +59,5 @@ export class Buddy implements IBuddy {
   public lastName: string | undefined;
   public phoneNo!: IPhoneNo[];
   public email: string | undefined;
-  public imageUrl: string | undefined;
+  public emoji: string | undefined;
 }

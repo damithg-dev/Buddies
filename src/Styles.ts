@@ -3,7 +3,7 @@ import {StyleSheet, ViewStyle, StyleProp} from 'react-native';
 import {Color} from './Color';
 
 const shadowStyle: StyleProp<ViewStyle> = {
-  shadowColor: Color.PastelGrey,
+  shadowColor: Color.PastelGreyDark,
   shadowOffset: {
     width: 0,
     height: 6,

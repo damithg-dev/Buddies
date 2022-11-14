@@ -16,7 +16,7 @@ export const BuddyRow = ({buddy, onPress}: BuddyRowProp) => {
         <ProfileIcon
           firstName={buddy.firstName}
           lastName={buddy.lastName}
-          imageUrl={buddy.imageUrl}
+          emoji={buddy.emoji}
           size={45}
         />
         <View style={styles.textContainer}>

@@ -71,7 +71,7 @@ export const Text = ({
 
 export const textStyles = StyleSheet.create({
   text: {
-    color: Color.PastelBlack,
+    color: Color.PastelBlueDark,
     lineHeight: 24,
   },
 
@@ -90,6 +90,6 @@ export const textStyles = StyleSheet.create({
   },
 
   muted: {
-    color: Color.PastelGrey,
+    color: Color.PastelGreyLight,
   },
 });

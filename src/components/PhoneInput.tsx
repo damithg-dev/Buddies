@@ -3,7 +3,6 @@ import {
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
   StyleSheet,
-  View,
 } from 'react-native';
 import {Text, textStyles} from './Text';
 import {Color} from '../Color';
