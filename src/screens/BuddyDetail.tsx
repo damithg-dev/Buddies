@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   RouteProp,
   NavigationProp,
@@ -15,7 +15,7 @@ import {Color} from '../Color';
 import {Font} from '../Font';
 import {Edit} from '../icons/Edit';
 import {Pressable} from '../components/Pressable';
-import { useService } from '../realm/Service';
+import {useService} from '../realm/Service';
 
 const {width} = Dimensions.get('screen');
 
@@ -27,7 +27,7 @@ export const BuddyDetail = () => {
     params: {buddy},
   } = useRoute<RouteProps>();
   const {navigate, goBack} = useNavigation<NavigationProps>();
-  const {delete} = useService();
+  const {onDelete, onUpdate} = useService();
 
   const onPressRemove = () => {
     Alert.alert("Let's Kick this bugger", '', [
@@ -38,10 +38,35 @@ export const BuddyDetail = () => {
       {
         text: 'KICK 🦵',
         style: 'destructive',
-        onPress: () => {delete()},
+        onPress: () => {
+          goBack();
+          onDelete(buddy);
+        },
       },
     ]);
   };
+
+  const onPressFavorite = useCallback(() => {
+    const _buddy: IBuddy = {
+      id: buddy.id,
+      firstName: buddy.firstName,
+      lastName: buddy.lastName,
+      email: buddy.email,
+      emoji: buddy.emoji,
+      phoneNo: buddy.phoneNo.map(_phone => ({
+        number: _phone.number,
+        type: _phone.type,
+      })),
+      isFavorite: !buddy.isFavorite,
+    };
+    onUpdate(_buddy);
+  }, [buddy, onUpdate]);
+
+  if (!buddy) {
+    return <></>;
+  }
+
+  console.log(buddy);
 
   return (
     <View style={styles.root}>
@@ -50,7 +75,12 @@ export const BuddyDetail = () => {
         leftIcon={<ArrowLeft />}
         onPressLeft={() => goBack()}
         rightIcon={<Edit />}
-        onPressRight={() => {}}
+        onPressRight={() =>
+          navigate('Edit', {
+            buddy: buddy,
+          })
+        }
+        backgroundColor={'white'}
       />
       <ScrollView>
         <View style={styles.scrollSubContainer}>
@@ -66,11 +96,16 @@ export const BuddyDetail = () => {
           {buddy.phoneNo.map(phone => {
             return <BuddyDetailLabel label={phone.type} value={phone.number} />;
           })}
-          <Pressable
-            onPress={onPressRemove}
-            style={styles.detailLabelContainer}>
+          <Pressable onPress={onPressRemove} style={styles.buttonContainer}>
             <Text center style={styles.deleteButtonText}>
               Remove The Bugger 👊
+            </Text>
+          </Pressable>
+          <Pressable onPress={onPressFavorite} style={styles.buttonContainer}>
+            <Text center style={styles.buttonText}>
+              {buddy.isFavorite
+                ? 'Remove From Favorite 🤕'
+                : 'Add to Favorite 🤩'}
             </Text>
           </Pressable>
         </View>
@@ -96,11 +131,13 @@ const BuddyDetailLabel = ({label, value}: {label: string; value?: string}) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: Color.PastelGreyLight,
   },
   scrollSubContainer: {
     width: width,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: '10%',
   },
   detailContainer: {
     padding: 24,
@@ -111,7 +148,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     width: '90%',
-    marginVertical: 16,
+    marginVertical: 8,
   },
   detailLabelText: {
     fontSize: 10,
@@ -121,12 +158,21 @@ const styles = StyleSheet.create({
     fontFamily: Font.SemiBold,
     color: Color.PastelBlueDark,
   },
-  deleteButtonContainer: {
+  buttonContainer: {
     borderRadius: 10,
     backgroundColor: Color.PastelWhite,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     width: '90%',
-    marginVertical: 16,
+    marginVertical: 8,
+  },
+  buttonText: {
+    color: Color.PastelBlack,
+    fontFamily: Font.Medium,
+    fontSize: 16,
+    paddingTop: 10,
+    paddingBottom: 4,
+    textAlignVertical: 'center',
   },
   deleteButtonText: {
     color: Color.PastelRed,

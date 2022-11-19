@@ -14,18 +14,18 @@ type ContextState = {
   buddies: IBuddy[];
   loading: boolean;
   error: Error | null;
-  create: (buddy: IBuddy) => void;
-  update: (id: IBuddy['id']) => void;
-  delete: (id: string) => void;
+  onCreate: (buddy: IBuddy) => void;
+  onUpdate: (buddy: IBuddy) => void;
+  onDelete: (buddy: IBuddy) => void;
 };
 
 const BuddyContext = createContext<ContextState>({
   buddies: [],
   loading: false,
   error: null,
-  create: () => [],
-  update: () => [],
-  delete: () => [],
+  onCreate: () => [],
+  onUpdate: () => [],
+  onDelete: () => [],
 });
 
 export const BuddiesProvider = ({...rest}) => {
@@ -57,17 +57,34 @@ export const BuddiesProvider = ({...rest}) => {
   );
 
   const onUpdate = useCallback(
-    (id: IBuddy['id']) => {
-      realm.write(() => {});
+    (_buddy: IBuddy) => {
+      try {
+        realm.write(() => {
+          realm.create(
+            SchemaKey.Buddy,
+            new Buddy(_buddy),
+            Realm.UpdateMode.Modified,
+          );
+        });
+      } catch (e) {
+        console.error(e);
+      }
+      setReload(!reload);
+      return buddies;
     },
-    [realm],
+    [buddies, realm, reload],
   );
 
   const onDelete = useCallback(
-    (id: IBuddy['id']) => {
-      realm.write(() => {});
+    (_buddy: IBuddy) => {
+      try {
+        realm.write(() => realm.delete(_buddy));
+        setReload(!reload);
+      } catch (e) {
+        console.log(e);
+      }
     },
-    [realm],
+    [realm, reload],
   );
 
   const value = useMemo(
@@ -75,9 +92,9 @@ export const BuddiesProvider = ({...rest}) => {
       buddies,
       loading,
       error,
-      create: onCreate,
-      update: onUpdate,
-      delete: onDelete,
+      onCreate,
+      onUpdate,
+      onDelete,
     }),
     [buddies, loading, error, onCreate, onUpdate, onDelete],
   );

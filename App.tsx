@@ -8,6 +8,7 @@ import {BuddyCreate} from './src/screens/BuddyCreate';
 
 import {BuddyRealmContext} from './src/realm';
 import {BuddiesProvider} from './src/realm/Service';
+import {BuddyEdit} from './src/screens/BuddyEdit';
 
 export type NavigatorParamList = {
   List: undefined;
@@ -15,6 +16,9 @@ export type NavigatorParamList = {
     buddy: IBuddy;
   };
   Create: undefined;
+  Edit: {
+    buddy: IBuddy;
+  };
 };
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +33,7 @@ export default function App() {
             <Stack.Screen name="List" component={BuddyList} />
             <Stack.Screen name="Details" component={BuddyDetail} />
             <Stack.Screen name="Create" component={BuddyCreate} />
+            <Stack.Screen name="Edit" component={BuddyEdit} />
           </Stack.Navigator>
         </NavigationContainer>
       </BuddiesProvider>

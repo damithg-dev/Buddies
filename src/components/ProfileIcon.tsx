@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable, Platform} from 'react-native';
 import EmojiPicker from 'rn-emoji-keyboard';
 import {Text} from './Text';
 import {Font} from '../Font';
 import {Color} from '../Color';
+
+const isAndroid = Platform.OS === 'android';
 
 interface ProfileIconsProps {
   firstName: string;
@@ -36,7 +38,7 @@ export const ProfileIcon = ({
         <Pressable onPress={() => setOpen(true)}>
           <View key={firstName} style={styles.rootContainer}>
             <Text center style={emoji ? styles.emojiText : styles.nameText}>
-              {emoji
+              {emoji !== ''
                 ? emoji
                 : lastName
                 ? `${firstName.slice(0, 1)}${lastName
@@ -91,10 +93,11 @@ export const dynamicStyles = (size: number) =>
     },
     emojiText: {
       fontSize: size * 0.7,
-      lineHeight: size,
+      lineHeight: isAndroid ? size * 0.82 : size,
       color: Color.PastelWhite,
       textAlign: 'center',
       textAlignVertical: 'center',
+      alignSelf: 'center',
     },
     emojiSelectorContainer: {
       position: 'absolute',
@@ -109,7 +112,7 @@ export const dynamicStyles = (size: number) =>
       alignItems: 'center',
     },
     emojiSelectorText: {
-      lineHeight: 50,
+      lineHeight: isAndroid ? 35 : 50,
       fontSize: 32,
       textAlignVertical: 'center',
       textAlign: 'center',

@@ -1,5 +1,10 @@
 import React from 'react';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {ScrollView, StyleSheet, View, Dimensions, Keyboard} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FormikErrors, FormikTouched, useFormik} from 'formik';
@@ -18,16 +23,17 @@ import {useService} from '../realm/Service';
 
 const {width} = Dimensions.get('screen');
 
-type NavigationProps = NavigationProp<NavigatorParamList, 'Create'>;
+type NavigationProps = NavigationProp<NavigatorParamList, 'Edit'>;
+type RouteProps = RouteProp<NavigatorParamList, 'Edit'>;
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 interface FormProps {
   firstName: string;
-  phoneNo: IPhoneNo[];
   lastName?: string;
   email?: string;
+  phoneNo: IPhoneNo[];
   emoji?: string;
 }
 
@@ -56,22 +62,23 @@ const validationSchema = yup.object({
     .min(1, "don't you have the buddy phone no... 😱😱"),
 });
 
-export const BuddyCreate = () => {
+export const BuddyEdit = () => {
+  const {onUpdate} = useService();
   const {bottom} = useSafeAreaInsets();
   const {goBack} = useNavigation<NavigationProps>();
-  const {onCreate} = useService();
+  const {
+    params: {buddy},
+  } = useRoute<RouteProps>();
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNo: [
-      {
-        number: '',
-        type: 'Mobile',
-      },
-    ],
-    emoji: '',
+    firstName: buddy.firstName,
+    lastName: buddy.lastName,
+    email: buddy.email,
+    phoneNo: buddy.phoneNo.map(_phone => ({
+      number: _phone.number,
+      type: _phone.type,
+    })),
+    emoji: buddy.emoji,
   };
 
   const {
@@ -87,7 +94,11 @@ export const BuddyCreate = () => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (form: FormProps) => {
-      onCreate(form as IBuddy);
+      const _buddy = {
+        id: buddy.id,
+        ...form,
+      } as IBuddy;
+      onUpdate(_buddy);
       goBack();
     },
     validateOnBlur: true,
@@ -194,13 +205,17 @@ export const BuddyCreate = () => {
             },
           ]}>
           <Pressable
-            style={[Styles.shadowDefault, styles.button]}
+            style={[
+              Styles.shadowDefault,
+              styles.button,
+              !isValid && styles.buttonDisabled,
+            ]}
             disabled={!isValid}
             onPress={() => {
               Keyboard.dismiss();
               handleSubmit();
             }}>
-            <Text style={styles.buttonText}>Save</Text>
+            <Text style={styles.buttonText}>Update</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -227,7 +242,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '10%',
   },
   button: {
     backgroundColor: Color.PastelBlack,
@@ -237,6 +251,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 64,
     borderRadius: 32,
+    marginBottom: '10%',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
   buttonText: {
     fontFamily: Font.Bold,

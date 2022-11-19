@@ -5,6 +5,7 @@ interface IBuddy {
   phoneNo: PhoneNo[];
   emoji?: string;
   email?: string;
+  isFavorite: boolean;
 }
 
 interface IPhoneNo {

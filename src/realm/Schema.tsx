@@ -42,16 +42,18 @@ export class Buddy implements IBuddy {
         type: 'list',
         objectType: SchemaKey.PhoneNo,
       },
+      isFavorite: 'bool',
     },
   };
 
   constructor(_buddy: IBuddy) {
-    this.id = new UUID() as unknown as string;
+    this.id = _buddy.id ? _buddy.id : (new UUID() as unknown as string);
     this.firstName = _buddy.firstName;
     this.phoneNo = _buddy.phoneNo;
     this.lastName = _buddy.lastName;
     this.email = _buddy.email;
     this.emoji = _buddy.emoji;
+    this.isFavorite = _buddy.isFavorite ? _buddy.isFavorite : false;
   }
 
   public id!: string;
@@ -60,4 +62,5 @@ export class Buddy implements IBuddy {
   public phoneNo!: IPhoneNo[];
   public email: string | undefined;
   public emoji: string | undefined;
+  public isFavorite: boolean;
 }
