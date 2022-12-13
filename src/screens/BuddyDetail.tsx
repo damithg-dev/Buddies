@@ -101,13 +101,6 @@ export const BuddyDetail = () => {
               Remove The Bugger 👊
             </Text>
           </Pressable>
-          {/* <Pressable onPress={onPressFavorite} style={styles.buttonContainer}>
-            <Text center style={styles.buttonText}>
-              {buddy.isFavorite
-                ? 'Remove From Favorite 🤕'
-                : 'Add to Favorite 🤩'}
-            </Text>
-          </Pressable> */}
         </View>
       </ScrollView>
     </View>
