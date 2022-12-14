@@ -108,7 +108,7 @@ export const BuddyEdit = () => {
   return (
     <View style={styles.root}>
       <Header
-        title={'New Buddy'}
+        title={'Edit Buddy'}
         leftIcon={<ArrowLeft />}
         onPressLeft={() => goBack()}
         backgroundColor={'white'}
